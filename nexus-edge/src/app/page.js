@@ -66,6 +66,11 @@ const NexusEdgeLanding = () => {
     };
   }, [isProfileOpen]);
 
+  const toPriceProduct = () => {
+    // Redirect to pricing page
+    router.push('/product/pricing');
+  };
+
   const validateForm = (form, isLogin = false) => {
     const errors = {};
 
@@ -125,7 +130,7 @@ const NexusEdgeLanding = () => {
         // router.push('/feature');
       }
     } catch (error) {
-      setFormErrors({ submit: 'Login failed. Please check your credentials.' });
+      setFormErrors({ submit: 'Login failed. Please check your credentials' });
     } finally {
       setIsLoading(false);
     }
@@ -171,7 +176,7 @@ const NexusEdgeLanding = () => {
           redirect: false,
         });
         if (!loginResult?.error) {
-          
+
           //router.push('/feature');
         } else {
           setFormErrors({ submit: 'Signup successful, but login failed. Please try logging in.' });
@@ -693,7 +698,7 @@ const NexusEdgeLanding = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                onClick={() => setShowSignup(true)}
+                onClick={() => toPriceProduct()}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105"
               >
                 Start Free Trial

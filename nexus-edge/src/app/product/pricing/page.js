@@ -2,23 +2,34 @@
 
 import React, { useState, useEffect } from 'react';
 import { Check, X, ArrowRight, Shield, Wifi, Cloud, Zap, Server } from 'lucide-react';
+import { set } from 'zod';
 
 const App = () => {
   const [selectedPlan, setSelectedPlan] = useState('professional');
   const [snapLoaded, setSnapLoaded] = useState(false);
   const [processing, setProcessing] = useState({});
-
+  const [planSelected, setPlanSelected] = useState(false);
   // Load Midtrans Snap JS
   useEffect(() => {
     const midtransScriptUrl = process.env.NODE_ENV === 'production'
       ? 'https://app.midtrans.com/snap/snap.js'
       : 'https://app.sandbox.midtrans.com/snap/snap.js';
-    console.log(midtransScriptUrl)
+
     const script = document.createElement('script');
     script.src = midtransScriptUrl;
     script.async = true;
-    script.setAttribute('data-client-key', process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY);
-    script.onload = () => setSnapLoaded(true);
+    script.setAttribute('data-client-key', process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || '');
+
+    script.onload = () => {
+      console.log('Midtrans Snap.js loaded successfully');
+      setSnapLoaded(true);
+    };
+
+    script.onerror = () => {
+      console.error('Failed to load Midtrans script. Check URL or network.');
+      alert('Payment system failed to initialize. Please try again later.');
+    };
+
     document.body.appendChild(script);
 
     return () => {
@@ -145,18 +156,20 @@ const App = () => {
   ];
 
   const handlePayment = async (plan) => {
+    //if (planSelected) return;
+    setPlanSelected(true);
     if (!snapLoaded) {
       alert('Payment system is still loading. Please try again.');
       return;
     }
 
     if (plan.id === 'custom') {
+      setPlanSelected(true);
       window.location.href = 'mailto:sales@nexusedge.com?subject=Custom Plan Inquiry';
       return;
     }
-
     setProcessing(prev => ({ ...prev, [plan.id]: true }));
-
+    console.log(planSelected)
     try {
       // Create order ID
       const orderId = `NE-${plan.id.toUpperCase()}-${Date.now()}`;
@@ -196,7 +209,14 @@ const App = () => {
         setProcessing(prev => ({ ...prev, [plan.id]: false }));
         return;
       }
+
+      // 👇 Prevent calling pay() while popup is open
+      // if (window.snap.isPopupOpen()) {
+      //   console.warn('Payment popup already open. Ignoring duplicate request.');
+      //   return;
+      // }
       // Redirect to Midtrans payment page
+      
       window.snap.pay(snapToken, {
         // onSuccess: function (result) {
         //   console.log('Payment Success:', result);
@@ -215,6 +235,7 @@ const App = () => {
         },
         onClose: function () {
           console.log('Payment Popup Closed');
+          setPlanSelected(false);
           setProcessing(prev => ({ ...prev, [plan.id]: false }));
         }
       });
@@ -244,11 +265,16 @@ const App = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
           {plans.map((plan) => (
             <div
-              key={plan.id}
-              className={`relative backdrop-blur-xl bg-gradient-to-br ${plan.color} border border-white/10 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:border-white/20 ${selectedPlan === plan.id ? 'ring-2 ring-blue-400 shadow-2xl shadow-blue-400/20' : ''
-                } ${plan.popular ? 'ring-2 ring-purple-400 shadow-2xl shadow-purple-400/20' : ''}`}
-              onClick={() => setSelectedPlan(plan.id)}
-            >
+            key={plan.id}
+            className={`relative flex flex-col justify-between min-h-[600px] backdrop-blur-xl bg-gradient-to-br ${plan.color} border border-white/10 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:border-white/20 ${
+              selectedPlan === plan.id
+                ? 'ring-2 ring-blue-400 shadow-2xl shadow-blue-400/20'
+                : ''
+            } ${plan.popular ? 'ring-2 ring-purple-400 shadow-2xl shadow-purple-400/20' : ''}`}
+            onClick={() => setSelectedPlan(plan.id)}
+          >
+            {/* Bagian Atas: Header & Fitur */}
+            <div className="flex-1">
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
@@ -256,7 +282,7 @@ const App = () => {
                   </div>
                 </div>
               )}
-
+          
               <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 mb-4">
                   {plan.icon}
@@ -267,12 +293,10 @@ const App = () => {
                   <span className="text-4xl font-bold">
                     {plan.price ? `$${plan.price}` : 'Contact'}
                   </span>
-                  {plan.price && (
-                    <span className="text-slate-400 ml-2">{plan.period}</span>
-                  )}
+                  {plan.price && <span className="text-slate-400 ml-2">{plan.period}</span>}
                 </div>
               </div>
-
+          
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, index) => (
                   <li key={index} className="flex items-center">
@@ -287,31 +311,36 @@ const App = () => {
                   </li>
                 ))}
               </ul>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePayment(plan);
-                }}
-                disabled={processing[plan.id] || (plan.id !== 'custom' && !snapLoaded)}
-                className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${selectedPlan === plan.id
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
-                    : 'bg-white/10 text-white hover:bg-white/20'
-                  } ${plan.popular ? 'bg-gradient-to-r from-purple-500 to-pink-500' : ''} ${processing[plan.id] ? 'opacity-70 cursor-not-allowed' : ''
-                  }`}
-              >
-                {processing[plan.id] ? (
-                  'Processing...'
-                ) : plan.id === 'custom' ? (
-                  'Contact Sales'
-                ) : (
-                  <>
-                    Select Plan
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </>
-                )}
-              </button>
             </div>
+          
+            {/* Tombol di bagian bawah */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (planSelected) return;
+                handlePayment(plan);
+              }}
+              disabled={(plan.id !== 'custom' && !snapLoaded)}
+              className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
+                selectedPlan === plan.id
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
+                  : 'bg-white/10 text-white hover:bg-white/20'
+              } ${plan.popular ? 'bg-gradient-to-r from-purple-500 to-pink-500' : ''} ${
+                processing[plan.id] ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+            >
+              {processing[plan.id] ? (
+                'Processing...'
+              ) : plan.id === 'custom' ? (
+                'Contact Sales'
+              ) : (
+                <>
+                  Select Plan
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </button>
+          </div>
           ))}
         </div>
 
