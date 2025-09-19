@@ -5,7 +5,7 @@ import sys
 from pydnp3 import opendnp3, openpal, asiopal, asiodnp3
 
 LOG_LEVELS = opendnp3.levels.NORMAL | opendnp3.levels.ALL_COMMS
-LOCAL_IP = "0.0.0.0"
+LOCAL_IP = "127.0.0.1"
 PORT = 20000
 
 stdout_stream = logging.StreamHandler(sys.stdout)
@@ -252,6 +252,7 @@ class OutstationCommandHandler(opendnp3.ICommandHandler):
         :return: CommandStatus
         """
         OutstationApplication.process_point_value('Operate', command, index, op_type)
+        
         return opendnp3.CommandStatus.SUCCESS
 
 

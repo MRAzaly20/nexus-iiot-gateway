@@ -95,12 +95,12 @@ class MasterCmd(cmd.Cmd):
     def do_o1(self, line):
         """Send a DirectOperate BinaryOutput (group 12) index 5 LATCH_ON to the Outstation. Command syntax is: o1"""
         self.application.send_direct_operate_command(opendnp3.ControlRelayOutputBlock(opendnp3.ControlCode.LATCH_ON),
-                                                     5,
+                                                     0,
                                                      command_callback)
 
     def do_o2(self, line):
         """Send a DirectOperate AnalogOutput (group 41) index 10 value 7 to the Outstation. Command syntax is: o2"""
-        self.application.send_direct_operate_command(opendnp3.AnalogOutputInt32(7),
+        self.application.send_direct_operate_command(opendnp3.AnalogOutputFloat32(7.1),
                                                      10,
                                                      command_callback)
 
@@ -136,7 +136,7 @@ class MasterCmd(cmd.Cmd):
         """Send a SelectAndOperate BinaryOutput (group 12) CommandSet to the Outstation. Command syntax is: s2"""
         self.application.send_select_and_operate_command_set(opendnp3.CommandSet(
             [
-                opendnp3.WithIndex(opendnp3.ControlRelayOutputBlock(opendnp3.ControlCode.LATCH_ON), 0)
+                opendnp3.WithIndex(opendnp3.ControlRelayOutputBlock(opendnp3.ControlCode.LATCH_ON), 1)
             ]),
             command_callback
         )

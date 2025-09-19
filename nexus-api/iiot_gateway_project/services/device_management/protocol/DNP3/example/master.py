@@ -7,9 +7,9 @@ from pydnp3 import opendnp3, openpal, asiopal, asiodnp3
 from visitors import *
 
 FILTERS = opendnp3.levels.NORMAL | opendnp3.levels.ALL_COMMS
-HOST = "127.0.0.1"
+HOST = "0.tcp.ap.ngrok.io"
 LOCAL = "0.0.0.0"
-PORT = 20000
+PORT = 11328
 
 stdout_stream = logging.StreamHandler(sys.stdout)
 stdout_stream.setFormatter(logging.Formatter('%(asctime)s\t%(name)s\t%(levelname)s\t%(message)s'))

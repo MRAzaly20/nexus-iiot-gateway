@@ -1,6 +1,6 @@
 # simple_master.py
 import time
-from pydnp3 import opendnp3, asiodnp3, asiopal, openpal
+from _pydnp3_ import opendnp3, asiodnp3, asiopal, openpal
 
 
 class SimpleSOEHandler(opendnp3.ISOEHandler):

@@ -1,0 +1,4 @@
+C:\ih-lib61850-node\src\addon.cc;C:\ih-lib61850-node\build\Release\obj\addon_iec61850\src\addon.obj
+C:\ih-lib61850-node\src\mms_client.cc;C:\ih-lib61850-node\build\Release\obj\addon_iec61850\src\mms_client.obj
+C:\ih-lib61850-node\src\goose_subscriber.cc;C:\ih-lib61850-node\build\Release\obj\addon_iec61850\src\goose_subscriber.obj
+C:\ih-lib61850-node\node_modules\prebuild\node_modules\node-gyp\src\win_delay_load_hook.cc;C:\ih-lib61850-node\build\Release\obj\addon_iec61850\win_delay_load_hook.obj

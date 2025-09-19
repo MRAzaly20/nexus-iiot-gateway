@@ -1,0 +1,3 @@
+^C:\IH-LIB61850-NODE\LIB\BUILD\IEC61850.DLL
+call mkdir "C:\ih-lib61850-node\build\Release\" 2>nul & set ERRORLEVEL=0 & copy /Y "C:\ih-lib61850-node\lib\build\iec61850.dll" "C:\ih-lib61850-node\build\Release\iec61850.dll"
+if %errorlevel% neq 0 exit /b %errorlevel%

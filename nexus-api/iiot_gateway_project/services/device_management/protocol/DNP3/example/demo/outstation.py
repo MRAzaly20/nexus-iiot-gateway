@@ -1,6 +1,6 @@
 # simple_outstation.py
 import time
-from pydnp3 import opendnp3, asiodnp3, asiopal
+from _pydnp3_ import opendnp3, asiodnp3, asiopal
 
 
 class SimpleCommandHandler(opendnp3.ICommandHandler):

@@ -1,0 +1,57 @@
+[
+  {
+    "name": "simpleIOGenericIO",
+    "logicalNodes": {
+      "0": {
+        "name": "GGIO1",
+        "dataSets": {}
+      },
+      "1": {
+        "name": "LLN0",
+        "dataSets": {
+          "0": {
+            "name": "Events",
+            "reference": "simpleIOGenericIO/LLN0.Events",
+            "isDeletable": false,
+            "members": {
+              "0": "simpleIOGenericIO/GGIO1.SPCSO1.stVal[ST]",
+              "1": "simpleIOGenericIO/GGIO1.SPCSO2.stVal[ST]",
+              "2": "simpleIOGenericIO/GGIO1.SPCSO3.stVal[ST]",
+              "3": "simpleIOGenericIO/GGIO1.SPCSO4.stVal[ST]"
+            }
+          },
+          "1": {
+            "name": "Events2",
+            "reference": "simpleIOGenericIO/LLN0.Events2",
+            "isDeletable": false,
+            "members": {
+              "0": "simpleIOGenericIO/GGIO1.SPCSO1[ST]",
+              "1": "simpleIOGenericIO/GGIO1.SPCSO2[ST]",
+              "2": "simpleIOGenericIO/GGIO1.SPCSO3[ST]",
+              "3": "simpleIOGenericIO/GGIO1.SPCSO4[ST]"
+            }
+          },
+          "2": {
+            "name": "Measurements",
+            "reference": "simpleIOGenericIO/LLN0.Measurements",
+            "isDeletable": false,
+            "members": {
+              "0": "simpleIOGenericIO/GGIO1.AnIn1.mag.f[MX]",
+              "1": "simpleIOGenericIO/GGIO1.AnIn1.q[MX]",
+              "2": "simpleIOGenericIO/GGIO1.AnIn2.mag.f[MX]",
+              "3": "simpleIOGenericIO/GGIO1.AnIn2.q[MX]",
+              "4": "simpleIOGenericIO/GGIO1.AnIn3.mag.f[MX]",
+              "5": "simpleIOGenericIO/GGIO1.AnIn3.q[MX]",
+              "6": "simpleIOGenericIO/GGIO1.AnIn4.mag.f[MX]",
+              "7": "simpleIOGenericIO/GGIO1.AnIn4.q[MX]"
+            }
+          }
+        }
+      },
+      "2": {
+        "name": "LPHD1",
+        "dataSets": {}
+      }
+    }
+  }
+]
