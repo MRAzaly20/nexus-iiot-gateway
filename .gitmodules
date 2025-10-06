@@ -1,0 +1,3 @@
+[submodule "v0-iiot-gateway-website"]
+	path = v0-iiot-gateway-website
+	url = https://github.com/MRAzaly20/v0-iiot-gateway-website.git
